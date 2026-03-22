@@ -110,8 +110,11 @@ class TLAToBeat(edgeIn: TLEdge, bundle: TLBundleParameters, nameSuffix: Option[S
 }
 
 class TLAFromBeat(bundle: TLBundleParameters, nameSuffix: Option[String])(implicit p: Parameters) extends TLChannelFromBeat(new TLBundleA(bundle), nameSuffix)(p) {
-  when (io.beat.bits.head) { io.protocol.bits.mask := ~(0.U(io.protocol.bits.mask.getWidth.W)) }
+  when (io.beat.bits.head) { io.protocol.bits.mask := ~(0.U(io.protocol.bits.mask.getWidth.W)) } ; io.protocol.bits.domainId := 0.U ; protocol.bits.domainId := 0.U
 }
+// ; io.protocol.bits.domainId := 0.U ; protocol.bits.domainId := 0.U
+// io.protocol.bits.rcid := 0.U ; protocol.bits.rcid := 0.U ; io.protocol.bits.mcid := 0.U ; protocol.bits.mcid := 0.U
+
 
 class TLBToBeat(edgeOut: TLEdge, bundle: TLBundleParameters, nameSuffix: Option[String])(implicit p: Parameters) extends TLChannelToBeat(new TLBundleB(bundle), edgeOut, nameSuffix)(p) {
   has_body := edgeOut.hasData(protocol.bits) || (~protocol.bits.mask =/= 0.U)
@@ -125,7 +128,11 @@ class TLCToBeat(edgeIn: TLEdge, bundle: TLBundleParameters, nameSuffix: Option[S
   has_body := edgeIn.hasData(protocol.bits)
 }
 
-class TLCFromBeat(bundle: TLBundleParameters, nameSuffix: Option[String])(implicit p: Parameters) extends TLChannelFromBeat(new TLBundleC(bundle), nameSuffix)(p)
+class TLCFromBeat(bundle: TLBundleParameters, nameSuffix: Option[String])(implicit p: Parameters) extends TLChannelFromBeat(new TLBundleC(bundle), nameSuffix)(p) {
+  protocol.bits.domainId := 0.U
+  // protocol.bits.rcid := 0.U
+  // protocol.bits.mcid := 0.U
+}
 
 class TLDToBeat(edgeOut: TLEdge, bundle: TLBundleParameters, nameSuffix: Option[String])(implicit p: Parameters) extends TLChannelToBeat(new TLBundleD(bundle), edgeOut, nameSuffix)(p) {
   has_body := edgeOut.hasData(protocol.bits)
