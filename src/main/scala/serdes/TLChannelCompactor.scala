@@ -110,6 +110,10 @@ class TLAToBeat(edgeIn: TLEdge, bundle: TLBundleParameters, nameSuffix: Option[S
 }
 
 class TLAFromBeat(bundle: TLBundleParameters, nameSuffix: Option[String])(implicit p: Parameters) extends TLChannelFromBeat(new TLBundleA(bundle), nameSuffix)(p) {
+  io.protocol.bits.rcid := 0.U
+  io.protocol.bits.mcid := 0.U
+  protocol.bits.rcid := 0.U
+  protocol.bits.mcid := 0.U
   when (io.beat.bits.head) { io.protocol.bits.mask := ~(0.U(io.protocol.bits.mask.getWidth.W)) }
 }
 
